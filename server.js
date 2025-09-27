@@ -1,9 +1,12 @@
-const http = require('node:http');
+const db = require('./src/config/db.js');
 
-const server = http.createServer(function (req, res) {
-    console.log(req.headers);
-    res.writeHead(200)
-    res.end('Hello my client , from the official server 😊');
-})
+async function getTables() {
+    try {
+        const result = await db.query('SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\';');
+        console.log('connected to database and found tables: ', result.rows);
+    } catch (error) {
+        console.error('Database query error', err);
+    }
+}
 
-server.listen(5000, () => console.log(`Server is running on PORT 5000`));
+getTables();

@@ -37,7 +37,7 @@ router.put("/:id", async (req, res) => {
   }
   try {
     const { rows } = await db.query(
-      "UPDATE category SET category_name = $1 WHERE category_id = $2 RETURNING *; ",
+      "UPDATE category SET category_name = $1 WHERE category_uuid = $2 RETURNING *; ",
       [name, id]
     )
     if (rows.length === 0) {
@@ -53,7 +53,7 @@ router.put("/:id", async (req, res) => {
 router.delete('/:id', async (req,res) => {
   const { id } = req.params;
   try {
-    const { rowCount } = await db.query("DELETE FROM category WHERE category_id = $1;", [id]);
+    const { rowCount } = await db.query("DELETE FROM category WHERE category_uuid = $1;", [id]);
     if (rowCount === 0) {
       return res.status(404).json({error: "Category not found"});
     }

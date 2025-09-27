@@ -29,4 +29,21 @@ router.get("/:id", async (req, res) => {
     return res.status(500).json({ error: "Server Error" })
   }
 })
+
+router.post("/create", async (req, res) => {
+  const { supplier_name, contact, address } = req.body
+  try {
+    if (!supplier_name || !address) {
+      return res.status(400).json("Empty files are not required")
+    }
+    const { rows } = await db.query(
+      "INSERT INTO supplier (supplier_name, contact, address) VALUES ($1 , $2, $3) RETURNING *;",
+      [supplier_name, contact, address]
+    )
+    return res.status(200).json(rows[0])
+  } catch (error) {
+    console.error("Error creating user!", error)
+    return res.status(500).json({ error: "Server Error" })
+  }
+})
 module.exports = router

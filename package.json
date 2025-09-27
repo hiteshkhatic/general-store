@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/hiteshkhatic/general-store/issues"
   },
-  "homepage": "https://github.com/hiteshkhatic/general-store#readme"
+  "homepage": "https://github.com/hiteshkhatic/general-store#readme",
+  "dependencies": {
+    "@types/node": "^24.5.2"
+  }
 }

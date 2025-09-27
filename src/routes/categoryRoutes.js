@@ -50,4 +50,17 @@ router.put("/:id", async (req, res) => {
   }
 })
 
+router.delete('/:id', async (req,res) => {
+  const { id } = req.params;
+  try {
+    const { rowCount } = await db.query("DELETE FROM category WHERE category_id = $1;", [id]);
+    if (rowCount === 0) {
+      return res.status(404).json({error: "Category not found"});
+    }
+    res.status(204).send();
+  } catch (error) {
+    console.error('Error deleting category', error);
+    res.status(500).json({error: "Internal Server error"});
+  }
+})
 module.exports = router

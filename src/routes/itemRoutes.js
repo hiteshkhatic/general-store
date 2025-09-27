@@ -54,4 +54,19 @@ router.put("/:id", async (req, res) => {
     return res.status(500).json({ error: "Server error" })
   }
 })
+
+
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params
+  try {
+    const row = await db.query(
+      "DELETE FROM item WHERE item_id = $1 RETURNING *;",
+      [id]
+    )
+    res.status(200).end()
+  } catch (error) {
+    console.log("Not Deletig value some glith!", error)
+    return res.status(500).json({ error: "Unable to delete" })
+  }
+})
 module.exports = router

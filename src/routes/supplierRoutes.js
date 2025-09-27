@@ -46,4 +46,22 @@ router.post("/create", async (req, res) => {
     return res.status(500).json({ error: "Server Error" })
   }
 })
+
+router.put("/:id", async (req, res) => {
+  const { id } = req.params
+  const { supplier_name, contact, address } = req.body
+  try {
+    if (!supplier_name || !address) {
+      return res.status(404).json("Fields are Empty!")
+    }
+    const { rows } = await db.query(
+      "UPDATE supplier SET supplier_name = $1, contact = $2, address = $3 WHERE supplier_id = $4 RETURNING *;",
+      [supplier_name, contact, address, id]
+    )
+    res.status(200).json(rows[0])
+  } catch (error) {
+    console.error("Not working !", error)
+    return res.status(500).json({ error: "Server Error" })
+  }
+})
 module.exports = router

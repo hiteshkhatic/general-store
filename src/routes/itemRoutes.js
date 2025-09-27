@@ -23,4 +23,17 @@ router.post("/create", async (req,res) => {
     }
 })
 
+router.get("/:id", async (req,res) => {
+    const{ id } = req.params;
+    try {
+            const {rows} = await db.query("SELECT * FROM item WHERE (item_id) = ($1);", [id]);
+            if (rows.length === 0) {
+                res.status(404).json("No data found");
+            }
+            return res.status(200).json(rows[0]);
+    } catch (error) {
+        console.error("Not able to find your data dear !", error);
+        return res.status(500).json("Server error");
+    }
+})
 module.exports = router

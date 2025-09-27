@@ -1,12 +1,11 @@
-const db = require('./src/config/db.js');
+require('dotenv').config()
 
-async function getTables() {
-    try {
-        const result = await db.query('SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\';');
-        console.log('connected to database and found tables: ', result.rows);
-    } catch (error) {
-        console.error('Database query error', err);
-    }
-}
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 5501;
 
-getTables();
+const categoryRoutes = require('./src/routes/categoryRoutes.js');
+
+app.use('/category', categoryRoutes);
+
+app.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));

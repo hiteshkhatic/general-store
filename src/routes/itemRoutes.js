@@ -12,4 +12,15 @@ router.get("/readall", async (_, res) => {
   }
 })
 
+router.post("/create", async (req,res) => {
+    const { name, fid, unit } = req.body;
+    try {
+        const { rows } = await db.query("INSERT INTO item (item_name, category_id, item_unit) VALUES ($1, $2, $3) RETURNING *;", [name,fid,unit]);
+        res.status(201).json(rows[0]);
+    } catch (error) {
+        console.error('Inserting while Error', error);
+        res.status(500).json({ error: "Server Error"});
+    }
+})
+
 module.exports = router

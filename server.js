@@ -1,11 +1,11 @@
-require('dotenv').config()
+require("dotenv").config()
 
-const express = require('express');
-const app = express();
-const PORT = process.env.PORT || 5501;
+const express = require("express")
+const app = express()
+const categoryRoutes = require("./src/routes/categoryRoutes.js")
 
-const categoryRoutes = require('./src/routes/categoryRoutes.js');
+app.use(express.json())
+app.use("/category", categoryRoutes)
 
-app.use('/category', categoryRoutes);
-
-app.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));
+const PORT = process.env.PORT
+app.listen(PORT || 5501, () => console.log(`Server is running on PORT ${PORT}`))

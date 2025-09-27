@@ -64,4 +64,18 @@ router.put("/:id", async (req, res) => {
     return res.status(500).json({ error: "Server Error" })
   }
 })
+
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params
+  try {
+    const { rows } = await db.query(
+      "DELETE FROM supplier WHERE supplier_id = $1",
+      [id]
+    )
+    res.status(200).end()
+  } catch (error) {
+    console.error("Not able to delte!", error)
+    return res.status(500).json({ error: "Sever error" })
+  }
+})
 module.exports = router

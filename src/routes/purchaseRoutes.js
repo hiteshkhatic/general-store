@@ -43,4 +43,16 @@ router.post("/create", async (req, res) => {
   }
 })
 
+router.get("/readall", async (req, res) => {
+  try {
+    const { rows } = await db.query("SELECT * FROM purchase;")
+    if (rows.length === 0) {
+      return res.status(400).json("No records found!")
+    }
+    res.status(200).json(rows)
+  } catch (error) {
+    console.error("cannot get all purchases!", error)
+    return res.status(500).json({ error: "Internal Server Error" })
+  }
+})
 module.exports = router

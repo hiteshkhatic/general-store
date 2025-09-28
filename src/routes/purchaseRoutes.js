@@ -117,4 +117,21 @@ router.put("/:id", async (req, res) => {
   }
 })
 
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params
+  try {
+    const { rows } = await db.query(
+      "DELETE FROM purchase WHERE purchase_id = $1 RETURNING *;",
+      [id]
+    )
+    if (rows.length === 0) {
+      return res.status(404).json("No records found for this id")
+    }
+    res.status(200).end("Deleted")
+  } catch (error) {
+    console.error("Trouble!", error)
+    return res.status(500).json({ error: "Internal server error" })
+  }
+})
+
 module.exports = router

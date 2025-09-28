@@ -73,4 +73,48 @@ router.get("/:id", async (req, res) => {
   }
 })
 
+router.put("/:id", async (req, res) => {
+  const {
+    itemid,
+    supplierid,
+    quantity,
+    purchased_price,
+    purchasing_date,
+    when_purchased_mnf_date,
+    expiry_date,
+  } = req.body
+
+  const { id } = req.params
+  try {
+    const { rows } = await db.query(
+      "UPDATE purchase SET item_id = $1, supplier_id = $2, qty = $3, price = $4, date = $5, mnf_date = $6, expiry = $7 WHERE purchase_id = $8 RETURNING *;",
+      [
+        itemid,
+        supplierid,
+        quantity,
+        purchased_price,
+        purchasing_date,
+        when_purchased_mnf_date,
+        expiry_date,
+        id,
+      ]
+    )
+    if (
+      !itemid ||
+      !supplierid ||
+      !quantity ||
+      !purchased_price ||
+      !purchasing_date ||
+      !when_purchased_mnf_date ||
+      !expiry_date
+    ) {
+      return res.status(404).json("Unable to insert Empty fields!")
+    }
+    res.status(200).json(rows[0])
+  } catch (error) {
+    console.error("Not working", error)
+    return res.status(500).json({ error: "Internal server error" })
+  }
+})
+
 module.exports = router

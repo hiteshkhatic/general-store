@@ -55,4 +55,22 @@ router.get("/readall", async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" })
   }
 })
+
+router.get("/:id", async (req, res) => {
+  const { id } = req.params
+  try {
+    const { rows } = await db.query(
+      "SELECT * FROM purchase WHERE (purchase_id) = ($1);",
+      [id]
+    )
+    if (!rows) {
+      return res.status(404).json("No records found for this Purchase!")
+    }
+    return res.status(200).json(rows[0])
+  } catch (error) {
+    console.error("Unable to found!", error)
+    return res.status(500).json({ error: "Internal server error" })
+  }
+})
+
 module.exports = router
